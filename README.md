@@ -1,18 +1,16 @@
 # Advent of Code 2021
 Solutions to [Advent of Code 2021](https://adventofcode.com/2021)
 
-Once again, I participated in Advent of Code for practice and fun. Here you'll find solutions clever and comical,
-flawed and forgettable. Some done in a rush in the middle of the night, and (eventually) some done months later and
-carefully refined for performance or simply to try out a new language feature.
+We're doin' it again!
 
 This year I'm hoping to lower the time committment by solving first in C#. I will likely end up solving some in other
-languages and will track which solutions I've done, using the chart below.
+languages later and will track which solutions I've done, using the chart below.
 
 ## Progress
 
 |      |1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|
 |------|-|-|-|-|-|-|-|-|-|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|
-|**C#**|🌟|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|
+|**C#**|🌟|🌟|🌟|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|☆|
 
 ⭐ - First star completed\
 🌟 - Both stars completed
@@ -30,3 +28,4 @@ C# - [output.txt](csharp/output.txt)
 
 ## Links
 * [Advent of Code](https://adventofcode.com)
+* [Last Year's Solutions](https://github.com/efrees/adventofcode2020)
