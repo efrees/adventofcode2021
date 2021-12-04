@@ -21,28 +21,19 @@ namespace AdventOfCode2021.Solvers
 
         private static long GetPart1Answer(List<string> lines)
         {
-            var sequence = lines.First().Split(',').Select(int.Parse).ToList();
-
-            var boards = new List<BingoBoard>();
-
-            var currentBoard = new BingoBoard();
-            foreach (var line in lines.Skip(2))
-            {
-                if (string.IsNullOrWhiteSpace(line))
-                {
-                    boards.Add(currentBoard);
-                    currentBoard = new BingoBoard();
-                    continue;
-                }
-
-                var row = line.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList();
-                currentBoard.Board.Add(row);
-            }
+            var (sequence, boards) = ParseBoards(lines);
 
             return PlayBingo(sequence, boards);
         }
 
         private static long GetPart2Answer(List<string> lines)
+        {
+            var (sequence, boards) = ParseBoards(lines);
+
+            return PlayBingo2(sequence, boards);
+        }
+
+        private static (List<int> sequence, List<BingoBoard> boards) ParseBoards(List<string> lines)
         {
             var sequence = lines.First().Split(',').Select(int.Parse).ToList();
 
@@ -62,7 +53,7 @@ namespace AdventOfCode2021.Solvers
                 currentBoard.Board.Add(row);
             }
 
-            return PlayBingo2(sequence, boards);
+            return (sequence, boards);
         }
 
         private static int PlayBingo(List<int> sequence, List<BingoBoard> boards)
@@ -98,7 +89,7 @@ namespace AdventOfCode2021.Solvers
 
             return -1;
         }
-        
+
         private class BingoBoard
         {
             public IList<IList<int>> Board { get; set; } = new List<IList<int>>();
@@ -116,12 +107,9 @@ namespace AdventOfCode2021.Solvers
                             row[i] = -1;
 
                             if (row.All(x => x == -1)
-                            || Board.All(r => r[i] == -1))
+                                || Board.All(r => r[i] == -1))
                             {
                                 IsWinner = true;
-                            } else
-                            {
-                                
                             }
                         }
                     }
