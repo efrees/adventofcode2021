@@ -22,67 +22,19 @@ namespace AdventOfCode2021.Solvers
 
         private static long GetPart1Answer(List<LineSegment> segments)
         {
-            var intersections = FillSegmentsOnGrid(segments.Where(s => s.IsVertical || s.IsHorizontal));
-
-            return intersections.Values.Count(v => v >= 2);
+            return CountIntersections(segments.Where(s => s.IsVertical || s.IsHorizontal));
         }
 
         private static long GetPart2Answer(List<LineSegment> segments)
         {
-            var intersections = FillSegmentsOnGrid(segments);
-
-            return intersections.Values.Count(v => v >= 2);
+            return CountIntersections(segments);
         }
 
-        private static Dictionary<(int, int), int> FillSegmentsOnGrid(IEnumerable<LineSegment> segments)
+        private static int CountIntersections(IEnumerable<LineSegment> segments)
         {
-            var intersections = new Dictionary<(int, int), int>();
-
-            foreach (var segment in segments)
-            {
-                if (segment.IsHorizontal)
-                {
-                    var y = segment.Start.y;
-                    var xMin = Math.Min(segment.Start.x, segment.End.x);
-                    var xMax = Math.Max(segment.Start.x, segment.End.x);
-                    for (var x = xMin; x <= xMax; x++)
-                    {
-                        intersections[(x, y)] = intersections.GetValueOrDefault((x, y), 0) + 1;
-                    }
-                }
-                else if (segment.IsVertical)
-                {
-                    var x = segment.Start.x;
-                    var yMin = Math.Min(segment.Start.y, segment.End.y);
-                    var yMax = Math.Max(segment.Start.y, segment.End.y);
-                    for (var y = yMin; y <= yMax; y++)
-                    {
-                        intersections[(x, y)] = intersections.GetValueOrDefault((x, y), 0) + 1;
-                    }
-                }
-                else if (segment.IsUpDiagonal)
-                {
-                    var xMin = Math.Min(segment.Start.x, segment.End.x);
-                    var xMax = Math.Max(segment.Start.x, segment.End.x);
-                    var y = Math.Min(segment.Start.y, segment.End.y);
-                    for (var x = xMin; x <= xMax; x++, y++)
-                    {
-                        intersections[(x, y)] = intersections.GetValueOrDefault((x, y), 0) + 1;
-                    }
-                }
-                else if (segment.IsDownDiagonal)
-                {
-                    var xMin = Math.Min(segment.Start.x, segment.End.x);
-                    var xMax = Math.Max(segment.Start.x, segment.End.x);
-                    var y = Math.Max(segment.Start.y, segment.End.y);
-                    for (var x = xMin; x <= xMax; x++, y--)
-                    {
-                        intersections[(x, y)] = intersections.GetValueOrDefault((x, y), 0) + 1;
-                    }
-                }
-            }
-
-            return intersections;
+            return segments.SelectMany(s => s.AsPointSequence())
+                .GroupBy(point => point)
+                .Count(group => group.Count() > 1);
         }
 
         private LineSegment ParseLine(string line)
@@ -97,13 +49,32 @@ namespace AdventOfCode2021.Solvers
 
         private class LineSegment
         {
-            public (int x, int y) Start { get; set; }
-            public (int x, int y) End { get; set; }
+            public (int x, int y) Start { get; init; }
+            public (int x, int y) End { get; init; }
 
             public bool IsHorizontal => Start.y == End.y;
             public bool IsVertical => Start.x == End.x;
-            public bool IsUpDiagonal => Start.x - End.x == Start.y - End.y;
-            public bool IsDownDiagonal => Start.x - End.x == -(Start.y - End.y);
+
+            public IEnumerable<(int x, int y)> AsPointSequence()
+            {
+                var xStep = NormalizeStep(End.x - Start.x);
+                var yStep = NormalizeStep(End.y - Start.y);
+
+                for (var point = Start; point != End; point = (point.x + xStep, point.y + yStep))
+                {
+                    yield return point;
+                }
+            }
+
+            private static int NormalizeStep(int totalTravel)
+            {
+                return totalTravel switch
+                {
+                    < 0 => -1,
+                    0 => 0,
+                    > 0 => 1
+                };
+            }
         }
     }
 }
