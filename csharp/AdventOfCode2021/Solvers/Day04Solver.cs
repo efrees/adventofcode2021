@@ -23,14 +23,14 @@ namespace AdventOfCode2021.Solvers
         {
             var (sequence, boards) = ParseBoards(lines);
 
-            return PlayBingo(sequence, boards);
+            return GetWinningScoreSequence(sequence, boards).First();
         }
 
         private static long GetPart2Answer(List<string> lines)
         {
             var (sequence, boards) = ParseBoards(lines);
 
-            return PlayBingo2(sequence, boards);
+            return GetWinningScoreSequence(sequence, boards).Last();
         }
 
         private static (List<int> sequence, List<BingoBoard> boards) ParseBoards(List<string> lines)
@@ -56,38 +56,21 @@ namespace AdventOfCode2021.Solvers
             return (sequence, boards);
         }
 
-        private static int PlayBingo(List<int> sequence, List<BingoBoard> boards)
+        private static IEnumerable<int> GetWinningScoreSequence(List<int> sequence, List<BingoBoard> boards)
         {
+            var alreadyWon = new HashSet<BingoBoard>();
             foreach (var nextCalled in sequence)
             {
-                foreach (var board in boards)
+                foreach (var board in boards.Except(alreadyWon))
                 {
                     board.Mark(nextCalled);
                     if (board.IsWinner)
                     {
-                        return board.Score() * nextCalled;
+                        alreadyWon.Add(board);
+                        yield return board.GetScore() * nextCalled;
                     }
                 }
             }
-
-            return -1;
-        }
-
-        private static int PlayBingo2(List<int> sequence, List<BingoBoard> boards)
-        {
-            foreach (var nextCalled in sequence)
-            {
-                foreach (var board in boards)
-                {
-                    board.Mark(nextCalled);
-                    if (boards.All(b => b.IsWinner))
-                    {
-                        return board.Score() * nextCalled;
-                    }
-                }
-            }
-
-            return -1;
         }
 
         private class BingoBoard
@@ -111,12 +94,14 @@ namespace AdventOfCode2021.Solvers
                             {
                                 IsWinner = true;
                             }
+
+                            return;
                         }
                     }
                 }
             }
 
-            public int Score()
+            public int GetScore()
             {
                 return Board.Sum(row => row.Where(x => x != -1).Sum());
             }
