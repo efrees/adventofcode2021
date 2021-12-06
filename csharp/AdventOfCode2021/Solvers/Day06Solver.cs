@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace AdventOfCode2021.Solvers
 {
@@ -31,6 +30,17 @@ namespace AdventOfCode2021.Solvers
             return groups.Sum(g => g.Count);
         }
 
+        private static long GetPart2Answer(List<long> timers)
+        {
+            var groups = Enumerable.Range(0, 9).Select(timer => new FishGroup { Timer = timer, Count = 0 }).ToList();
+
+            timers.ForEach(t => groups.First(g => g.Timer == t).Count++);
+
+            RunGenerations(groups, 256);
+
+            return groups.Sum(g => g.Count);
+        }
+
         private static void RunGenerations(List<FishGroup> groups, int generationCount)
         {
             for (var generation = 0; generation < generationCount; generation++)
@@ -56,17 +66,6 @@ namespace AdventOfCode2021.Solvers
 
                 //Currently, I'm leaving duplicate 6's
             }
-        }
-
-        private static long GetPart2Answer(List<long> timers)
-        {
-            var groups = Enumerable.Range(0, 9).Select(timer => new FishGroup { Timer = timer, Count = 0 }).ToList();
-
-            timers.ForEach(t => groups.First(g => g.Timer == t).Count++);
-
-            RunGenerations(groups, 256);
-
-            return groups.Sum(g => g.Count);
         }
 
         private class FishGroup
