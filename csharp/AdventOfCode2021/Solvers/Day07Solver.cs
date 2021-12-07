@@ -13,43 +13,56 @@ namespace AdventOfCode2021.Solvers
         public void Solve()
         {
             Console.WriteLine(Name);
-            var lines = Input.GetInputFromFile(InputFile).Split(',').Select(long.Parse).ToList();
+            var lines = Input.GetInputFromFile(InputFile)
+                .Split(',')
+                .Select(int.Parse)
+                .OrderBy(x => x)
+                .ToList();
 
             Console.WriteLine($"Output (part 1): {GetPart1Answer(lines)}");
             Console.WriteLine($"Output (part 2): {GetPart2Answer(lines)}");
         }
 
-        private static long GetPart1Answer(List<long> input)
+        private static int GetPart1Answer(List<int> input)
         {
-            var min = input.Sum();
-            foreach (var target in input) //lucky
+            var min = int.MaxValue;
+            var low = input.First();
+            var high = input.Last();
+            foreach (var target in Enumerable.Range(low, high-low))
             {
                 var newSum = input.Sum(i => Math.Abs(i - target));
-                if (newSum < min)
+                if (newSum > min)
                 {
-                    min = newSum;
+                    break;
                 }
+
+                min = newSum;
             }
 
             return min;
         }
 
-        private static long GetPart2Answer(List<long> input)
+        private static int GetPart2Answer(List<int> input)
         {
-            var min = long.MaxValue;
-            foreach (var target in Enumerable.Range((int)input.Min(), (int)input.Max() - (int)input.Min()))
+            var min = int.MaxValue;
+            var low = input.First();
+            var high = input.Last();
+            foreach (var target in Enumerable.Range(low, high-low))
             {
                 var newSum = input.Sum(i => Cost(i, target));
-                if (newSum < min)
+
+                if (newSum > min)
                 {
-                    min = newSum;
+                    break;
                 }
+             
+                min = newSum;
             }
 
             return min;
         }
 
-        private static long Cost(long from, long target)
+        private static int Cost(int from, int target)
         {
             var diff = Math.Abs(from - target);
             return diff * (diff + 1) / 2;
