@@ -19,6 +19,7 @@ namespace AdventOfCode2021
             new Day07Solver(),
             new Day08Solver(),
             new Day09Solver(),
+            new Day10Solver(),
         };
 
         public static void Main()
