@@ -1,52 +1,58 @@
+C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\Solvers\Day10Solver.cs(95,22): warning CS8509: The switch expression does not handle all possible values of its input type (it is not exhaustive). For example, the pattern ''\0'' is not covered. [C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\AdventOfCode2021.csproj]
 Day 1
 Output (part 1): 1316
 Output (part 2): 1344
-Solved in 0.026049100s
+Solved in 0.029890100s
 
 Day 2
 Output (part 1): 1762050
 Output (part 2): 1855892637
-Solved in 0.002128800s
+Solved in 0.001872800s
 
 Day 3
 Output (part 1): 852500
 Output (part 2): 1007985
-Solved in 0.013527100s
+Solved in 0.009650600s
 
 Day 4
 Output (part 1): 31424
 Output (part 2): 23042
-Solved in 0.009914200s
+Solved in 0.009716600s
 
 Day 5
 Output (part 1): 5260
 Output (part 2): 21613
-Solved in 0.122267300s
+Solved in 0.124585600s
 
 Day 6
 Output (part 1): 379114
 Output (part 2): 1702631502303
-Solved in 0.004421700s
+Solved in 0.004168500s
 
 Day 7
 Output (part 1): 344735
 Output (part 2): 96798233
-Solved in 0.014667700s
+Solved in 0.012960500s
 
 Day 8
 Output (part 1): 452
 Output (part 2): 1096964
-Solved in 0.011152000s
+Solved in 0.010956600s
 
 Day 9
 Output (part 1): 580
 Output (part 2): 856716
-Solved in 0.018920100s
+Solved in 0.020203300s
 
 Day 10
 Output (part 1): 392367
 Output (part 2): 2192104158
-Solved in 0.007063500s
+Solved in 0.005921800s
 
-Total time: 0.231238800s
+Day 11
+Output (part 1): 1743
+Output (part 2): 364
+Solved in 0.024044000s
+
+Total time: 0.255169900s
 

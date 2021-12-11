@@ -22,27 +22,12 @@ namespace AdventOfCode2021.Solvers
 
         private static int GetPart1Answer(List<string> input)
         {
-            var grid = input.SelectMany((line, y) => line.Select((ch, x) => (coords: (x, y), val: ch - '0')))
-                .ToDictionary(pair => pair.coords, pair => pair.val);
+            var grid = ParseAsGrid(input);
 
             var flashCount = 0;
             for (var i = 0; i < 100; i++)
             {
-                foreach (var (coords, value) in grid)
-                {
-                    grid[coords] = value + 1;
-                }
-
-                var flashedCoords = new HashSet<(int x, int y)>();
-                foreach (var (coords, value) in grid)
-                {
-                    flashCount += CheckFlashCoords(grid, coords, flashedCoords);
-                }
-
-                foreach (var coords in flashedCoords)
-                {
-                    grid[coords] = 0;
-                }
+                flashCount += ComputeStepReturningFlashCount(grid);
             }
 
             return flashCount;
@@ -50,29 +35,13 @@ namespace AdventOfCode2021.Solvers
 
         private static int GetPart2Answer(List<string> input)
         {
-            var grid = input.SelectMany((line, y) => line.Select((ch, x) => (coords: (x, y), val: ch - '0')))
-                .ToDictionary(pair => pair.coords, pair => pair.val);
+            var grid = ParseAsGrid(input);
 
             var syncStep = -1;
             var currentStep = 1;
             while (syncStep == -1)
             {
-                var flashCount = 0;
-                foreach (var (coords, value) in grid)
-                {
-                    grid[coords] = value + 1;
-                }
-
-                var flashedCoords = new HashSet<(int x, int y)>();
-                foreach (var (coords, value) in grid)
-                {
-                    flashCount += CheckFlashCoords(grid, coords, flashedCoords);
-                }
-
-                foreach (var coords in flashedCoords)
-                {
-                    grid[coords] = 0;
-                }
+                var flashCount = ComputeStepReturningFlashCount(grid);
 
                 if (flashCount == grid.Keys.Count)
                 {
@@ -85,7 +54,32 @@ namespace AdventOfCode2021.Solvers
             return syncStep;
         }
 
-        private static int CheckFlashCoords(Dictionary<(int x, int y), int> grid,
+        private static Dictionary<(int x, int y), int> ParseAsGrid(List<string> input)
+        {
+            return input
+                .SelectMany((line, y) => line.Select((ch, x) => (coords: (x, y), val: ch - '0')))
+                .ToDictionary(pair => pair.coords, pair => pair.val);
+        }
+
+        private static int ComputeStepReturningFlashCount(Dictionary<(int x, int y), int> grid)
+        {
+            foreach (var (coords, value) in grid)
+            {
+                grid[coords] = value + 1;
+            }
+
+            var flashedCoords = new HashSet<(int x, int y)>();
+            var flashCount = grid.Keys.Sum(coords => CheckAndFlashCoords(grid, coords, flashedCoords));
+
+            foreach (var coords in flashedCoords)
+            {
+                grid[coords] = 0;
+            }
+
+            return flashCount;
+        }
+
+        private static int CheckAndFlashCoords(Dictionary<(int x, int y), int> grid,
             (int x, int y) coords,
             HashSet<(int x, int y)> flashedCoords)
         {
@@ -99,7 +93,7 @@ namespace AdventOfCode2021.Solvers
             foreach (var adj in AdjacentCoords(coords, 9, 9))
             {
                 grid[adj] += 1;
-                flashCount += CheckFlashCoords(grid, adj, flashedCoords);
+                flashCount += CheckAndFlashCoords(grid, adj, flashedCoords);
             }
 
             return flashCount;
@@ -108,16 +102,17 @@ namespace AdventOfCode2021.Solvers
         private static IEnumerable<(int x, int y)> AdjacentCoords((int x, int y) coords, int maxX, int maxY)
         {
             foreach (var dx in Enumerable.Range(-1, 3))
-            foreach (var dy in Enumerable.Range(-1, 3))
             {
-                var newPoint = (x: coords.x + dx, y: coords.y + dy);
-                if (dx == 0 && dy == 0)
-                    continue;
-                if (newPoint.x < 0 || newPoint.x > maxX
-                                   || newPoint.y < 0 || newPoint.y > maxY)
-                    continue;
-
-                yield return newPoint;
+                foreach (var dy in Enumerable.Range(-1, 3))
+                {
+                    var newPoint = (x: coords.x + dx, y: coords.y + dy);
+                    if (dx == 0 && dy == 0)
+                        continue;
+                    if (newPoint.x >= 0 && newPoint.x <= maxX && newPoint.y >= 0 && newPoint.y <= maxY)
+                    {
+                        yield return newPoint;
+                    }
+                }
             }
         }
     }
