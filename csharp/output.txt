@@ -2,62 +2,73 @@ C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\Solvers\Day10S
 Day 1
 Output (part 1): 1316
 Output (part 2): 1344
-Solved in 0.030725500s
+Solved in 0.030615400s
 
 Day 2
 Output (part 1): 1762050
 Output (part 2): 1855892637
-Solved in 0.001778700s
+Solved in 0.001731000s
 
 Day 3
 Output (part 1): 852500
 Output (part 2): 1007985
-Solved in 0.010535100s
+Solved in 0.009460600s
 
 Day 4
 Output (part 1): 31424
 Output (part 2): 23042
-Solved in 0.009444800s
+Solved in 0.009464100s
 
 Day 5
 Output (part 1): 5260
 Output (part 2): 21613
-Solved in 0.126355400s
+Solved in 0.117607900s
 
 Day 6
 Output (part 1): 379114
 Output (part 2): 1702631502303
-Solved in 0.004522400s
+Solved in 0.004184200s
 
 Day 7
 Output (part 1): 344735
 Output (part 2): 96798233
-Solved in 0.014320200s
+Solved in 0.013566900s
 
 Day 8
 Output (part 1): 452
 Output (part 2): 1096964
-Solved in 0.011703900s
+Solved in 0.010864800s
 
 Day 9
 Output (part 1): 580
 Output (part 2): 856716
-Solved in 0.019289800s
+Solved in 0.017725600s
 
 Day 10
 Output (part 1): 392367
 Output (part 2): 2192104158
-Solved in 0.006357200s
+Solved in 0.007346700s
 
 Day 11
 Output (part 1): 1743
 Output (part 2): 364
-Solved in 0.027079200s
+Solved in 0.026070500s
 
 Day 12
 Output (part 1): 3708
 Output (part 2): 93858
-Solved in 0.199647500s
+Solved in 0.176068800s
 
-Total time: 0.463088300s
+Day 13
+Output (part 1): 743
+Output (part 2): 
+###...##..###..#.....##..#..#.#..#.#...
+#..#.#..#.#..#.#....#..#.#.#..#..#.#...
+#..#.#....#..#.#....#..#.##...####.#...
+###..#....###..#....####.#.#..#..#.#...
+#.#..#..#.#....#....#..#.#.#..#..#.#...
+#..#..##..#....####.#..#.#..#.#..#.####
+Solved in 0.011987500s
+
+Total time: 0.437895100s
 
