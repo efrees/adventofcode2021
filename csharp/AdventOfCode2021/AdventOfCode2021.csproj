@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Collections" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="InputFiles\*.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
