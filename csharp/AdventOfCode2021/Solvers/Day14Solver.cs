@@ -73,34 +73,23 @@ namespace AdventOfCode2021.Solvers
 
             var uniqueLetters = input.SelectMany(line => line).Where(char.IsLetter).Distinct().ToArray();
             var resultingCounts = new Dictionary<(char, char, int), Dictionary<char, long>>();
-            foreach (var first in uniqueLetters)
+            foreach (var (first, second) in AllPairsOf(uniqueLetters))
             {
-                foreach (var second in uniqueLetters)
+                resultingCounts.Add((first, second, 0), new Dictionary<char, long>
                 {
-                    resultingCounts.Add((first, second, 0), SingleCountsDictionary(first, second));
-                }
+                    { first, 1 }
+                });
             }
 
             for (var i = 1; i <= 40; i++)
             {
-                foreach (var first in uniqueLetters)
+                foreach (var (first, second) in AllPairsOf(uniqueLetters))
                 {
-                    foreach (var second in uniqueLetters)
-                    {
-                        if (!rules.ContainsKey((first, second)))
-                        {
-                            resultingCounts.Add((first, second, i), SingleCountsDictionary(first, second));
-                        }
-                        else
-                        {
-                            var inserted = rules[(first, second)];
-                            var leftCounts = resultingCounts[(first, inserted, i - 1)];
-                            var rightCounts = resultingCounts[(inserted, second, i - 1)];
-                            var combined = CombineCounts(leftCounts, rightCounts);
-                            combined[inserted]--; //remove overlap;
-                            resultingCounts.Add((first, second, i), combined);
-                        }
-                    }
+                    // The rule set is assumed to be complete
+                    var inserted = rules[(first, second)];
+                    var leftCounts = resultingCounts[(first, inserted, i - 1)];
+                    var rightCounts = resultingCounts[(inserted, second, i - 1)];
+                    resultingCounts.Add((first, second, i), CombineCounts(leftCounts, rightCounts));
                 }
             }
 
@@ -111,30 +100,21 @@ namespace AdventOfCode2021.Solvers
                 totalCounts = CombineCounts(totalCounts, counts);
             }
 
-            foreach (var ch in template[1..^1])
-            {
-                totalCounts[ch]--;
-            }
+            totalCounts[template.Last()]++;
 
             var totals = totalCounts.Values.OrderBy(x => x).ToList();
             return totals.Last() - totals.First();
         }
 
-        private static Dictionary<char, long> SingleCountsDictionary(char char1, char char2)
+        private static IEnumerable<(char, char)> AllPairsOf(char[] uniqueLetters)
         {
-            if (char1 == char2)
+            foreach (var first in uniqueLetters)
             {
-                return new Dictionary<char, long>
+                foreach (var second in uniqueLetters)
                 {
-                    { char1, 2 }
-                };
+                    yield return (first, second);
+                }
             }
-
-            return new Dictionary<char, long>
-            {
-                { char1, 1 },
-                { char2, 1 }
-            };
         }
 
         private static Dictionary<char, long> CombineCounts(Dictionary<char, long> firstCounts, Dictionary<char, long> secondCounts)
