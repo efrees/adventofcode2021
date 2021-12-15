@@ -18,7 +18,7 @@ namespace AdventOfCode2021.Solvers
                 .ToList();
 
             Console.WriteLine($"Output (part 1): {GetPart1Answer(lines)}");
-            //Console.WriteLine($"Output (part 2): {GetPart2Answer(lines)}");
+            Console.WriteLine($"Output (part 2): {GetPart2Answer(lines)}");
         }
 
         private static int GetPart1Answer(List<string> input)
@@ -47,7 +47,7 @@ namespace AdventOfCode2021.Solvers
                     return next.Cost;
                 }
 
-                if (visitedMins.ContainsKey(next.Position) && visitedMins[next.Position] < next.Cost)
+                if (visitedMins.ContainsKey(next.Position) && visitedMins[next.Position] <= next.Cost)
                 {
                     continue;
                 }
@@ -59,6 +59,80 @@ namespace AdventOfCode2021.Solvers
                     if (grid.ContainsKey(adjacent))
                     {
                         var nextCost = next.Cost + grid[adjacent];
+                        if (visitedMins.ContainsKey(adjacent) && visitedMins[adjacent] <= nextCost)
+                        {
+                            continue;
+                        }
+
+                        orderedFrontier.Add(nextCost + GetHeuristicCost(adjacent, target), new SearchNode
+                        {
+                            Position = adjacent,
+                            Cost = nextCost
+                        });
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        private static int GetPart2Answer(List<string> input)
+        {
+            var tileHeight = input.Count;
+            var tileWidth = input[0].Length;
+            var tile = ParseAsGrid(input);
+
+            var grid = new Dictionary<(int x, int y), int>();
+            //duplicate tile
+            for (var i = 0; i < 25; i++)
+            {
+                foreach (var (point, value) in tile)
+                {
+                    var ty = i / 5;
+                    var tx = i % 5;
+                    var valueOffset = ty + tx;
+                    var adjustedPoint = (point.x + tileWidth * tx, point.y + tileHeight * ty);
+                    grid[adjustedPoint] = (value - 1 + valueOffset) % 9 + 1;
+                }
+            }
+
+            var start = (0, 0);
+            var target = (tileWidth * 5 - 1, tileHeight * 5 - 1);
+
+            var orderedFrontier = new BinaryHeap<int, SearchNode>();
+            var visitedMins = new Dictionary<(int, int), int>();
+            var startNode = new SearchNode
+            {
+                Position = start,
+                Cost = 0
+            };
+            orderedFrontier.Add(GetHeuristicCost(start, target), startNode);
+            while (orderedFrontier.Count > 0)
+            {
+                var next = orderedFrontier.Dequeue().Value;
+
+                if (next.Position == target)
+                {
+                    return next.Cost;
+                }
+
+                if (visitedMins.ContainsKey(next.Position) && visitedMins[next.Position] <= next.Cost)
+                {
+                    continue;
+                }
+
+                visitedMins[next.Position] = next.Cost;
+
+                foreach (var adjacent in GetAdjacentPoints(next.Position))
+                {
+                    if (grid.ContainsKey(adjacent))
+                    {
+                        var nextCost = next.Cost + grid[adjacent];
+                        if (visitedMins.ContainsKey(adjacent) && visitedMins[adjacent] <= nextCost)
+                        {
+                            continue;
+                        }
+
                         orderedFrontier.Add(nextCost + GetHeuristicCost(adjacent, target), new SearchNode
                         {
                             Position = adjacent,
