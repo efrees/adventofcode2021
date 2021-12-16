@@ -145,7 +145,7 @@ namespace AdventOfCode2021.Solvers
             return -1;
         }
 
-        public static int GetHeuristicCost((int, int) start, (int, int) target)
+        private static int GetHeuristicCost((int, int) start, (int, int) target)
         {
             return target.Item1 - start.Item1 + target.Item2 - start.Item2;
         }
