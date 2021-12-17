@@ -25,7 +25,7 @@ namespace AdventOfCode2021
             new Day13Solver(),
             new Day14Solver(),
             new Day15Solver(),
-            new NullSolver("Day 16"),
+            new Day16Solver(),
             new Day17Solver(),
         };
 
