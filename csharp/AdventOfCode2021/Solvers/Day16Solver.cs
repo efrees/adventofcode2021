@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -19,13 +19,21 @@ namespace AdventOfCode2021.Solvers
                 .First();
 
             Console.WriteLine($"Output (part 1): {GetPart1Answer(input)}");
-            //Console.WriteLine($"Output (part 2): {GetPart2Answer(lines)}");
+            Console.WriteLine($"Output (part 2): {GetPart2Answer(input)}");
         }
 
         private static int GetPart1Answer(string input)
         {
             var cursor = 0;
             return ParsePacketAndSumVersionNumbers(input, ref cursor);
+        }
+
+        private static long GetPart2Answer(string input)
+        {
+            var cursor = 0;
+
+            //71649268678 too low
+            return ParsePacketAndComputeValue(input, ref cursor);
         }
 
         static string GetBinaryStringFromHex(string hexInput)
@@ -55,16 +63,6 @@ namespace AdventOfCode2021.Solvers
             }
 
             return sb.ToString();
-        }
-
-        static void DisplayBitArray(BitArray bitArray)
-        {
-            for (int i = 0; i < bitArray.Count; i++)
-            {
-                bool bit = bitArray.Get(i);
-                Console.Write(bit ? 1 : 0);
-            }
-            Console.WriteLine();
         }
 
         private static int ParsePacketAndSumVersionNumbers(string binary, ref int cursor)
@@ -101,9 +99,62 @@ namespace AdventOfCode2021.Solvers
             return versionSum;
         }
 
-        private static int ReadLiteral(string binary, ref int cursor)
+        private static long ParsePacketAndComputeValue(string binary, ref int cursor)
         {
-            var result = 0;
+            var version = GetInt(binary, cursor, 3);
+            var typeId = GetInt(binary, cursor + 3, 3);
+            cursor += 6;
+
+            if (typeId == 4)
+            {
+                return ReadLiteral(binary, ref cursor);
+            }
+
+            var nestedValues = new List<long>();
+            var lengthTypeIsCount = binary[cursor++] == '1';
+            if (lengthTypeIsCount)
+            {
+                var nestedCount = GetInt(binary, cursor, 11);
+                cursor += 11;
+
+                foreach (var _ in Enumerable.Range(1, nestedCount))
+                {
+                    nestedValues.Add(ParsePacketAndComputeValue(binary, ref cursor));
+                }
+            }
+            else
+            {
+                var nestedSize = GetInt(binary, cursor, 15);
+                cursor += 15;
+                var endPosition = cursor + nestedSize;
+                while (cursor < endPosition)
+                {
+                    nestedValues.Add(ParsePacketAndComputeValue(binary, ref cursor));
+                }
+            }
+
+            return typeId switch
+            {
+                0 => nestedValues.Sum(),
+                1 => nestedValues.Aggregate((product, current) => product * current),
+                2 => nestedValues.Min(),
+                3 => nestedValues.Max(),
+                5 => nestedValues.First() > nestedValues.Last()
+                    ? 1
+                    : 0,
+                6 => nestedValues.First() < nestedValues.Last()
+                    ? 1
+                    : 0,
+                7 => nestedValues.First() == nestedValues.Last()
+                    ? 1
+                    : 0,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+
+        private static long ReadLiteral(string binary, ref int cursor)
+        {
+            var result = 0L;
 
             while (binary[cursor] == '1')
             {
@@ -112,6 +163,7 @@ namespace AdventOfCode2021.Solvers
                 cursor += 5;
             }
             
+            result *= 16;
             result += GetInt(binary, cursor + 1, 4);
             cursor += 5;
 
@@ -121,16 +173,6 @@ namespace AdventOfCode2021.Solvers
         private static int GetInt(string binary, int start, int count)
         {
             return Convert.ToInt32(binary[start..(start + count)], 2);
-            var result = 0;
-            foreach (var i in Enumerable.Range(start, count))
-            {
-                result *= 2;
-                result += binary[i] == '1'
-                    ? 1
-                    : 0;
-            }
-
-            return result;
         }
     }
 }
