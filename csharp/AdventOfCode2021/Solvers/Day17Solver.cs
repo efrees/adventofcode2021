@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode2021.Solvers
 {
@@ -13,60 +14,71 @@ namespace AdventOfCode2021.Solvers
         public void Solve()
         {
             Console.WriteLine(Name);
-            var lines = Input.GetLinesFromFile(InputFile)
-                .ToList();
+            var lines = Input.GetInputFromFile(InputFile);
 
             Console.WriteLine($"Output (part 1): {GetPart1Answer(lines)}");
             Console.WriteLine($"Output (part 2): {GetPart2Answer(lines)}");
         }
 
-        private static int GetPart1Answer(List<string> input)
+        private static int GetPart1Answer(string input)
         {
-            // x=85..145, y=-163..-108
-            var xRange = (85, 145);
-            var yRange = (-163, -108);
+            var targetRange = ParseTargetRange(input);
 
             var bestMaxY = 0;
-            foreach (var x in Enumerable.Range(1, xRange.Item2))
+            foreach (var velocity in GenerateCandidateVelocities(targetRange))
             {
-                foreach (var y in Enumerable.Range(yRange.Item1, 1000)) //arbitrary bound
-                {
-                    var maxY = TrackProbeMaxY((x, y), xRange, yRange);
+                var maxY = TrackProbeMaxY(velocity, targetRange);
 
-                    if (maxY > bestMaxY)
-                    {
-                        bestMaxY = maxY;
-                    }
+                if (maxY > bestMaxY)
+                {
+                    bestMaxY = maxY;
                 }
             }
 
             return bestMaxY;
         }
 
-        private static int GetPart2Answer(List<string> input)
+        private static int GetPart2Answer(string input)
         {
-            // x=85..145, y=-163..-108
-            var xRange = (85, 145);
-            var yRange = (-163, -108);
+            var targetRange = ParseTargetRange(input);
 
             var countSuccesses = 0;
-            foreach (var x in Enumerable.Range(1, xRange.Item2))
+            foreach (var (x, y) in GenerateCandidateVelocities(targetRange))
             {
-                foreach (var y in Enumerable.Range(yRange.Item1, 1000)) //arbitrary bound
-                {
-                    var maxY = TrackProbeMaxY((x, y), xRange, yRange);
+                var maxY = TrackProbeMaxY((x, y), targetRange);
 
-                    if (maxY != -1)
-                    {
-                        countSuccesses++;
-                    }
+                if (maxY != -1)
+                {
+                    countSuccesses++;
                 }
             }
 
             return countSuccesses;
         }
-        
-        private static int TrackProbeMaxY((int x, int y) velocity, (int, int) xRange, (int, int) yRange)
+
+        private static (int minX, int maxX, int minY, int maxY) ParseTargetRange(string input)
+        {
+            var groups = Regex.Match(input, "target area: x=(-?\\d+)..(-?\\d+), y=(-?\\d+)..(-?\\d+)").Groups;
+            return (
+                int.Parse(groups[1].Value),
+                int.Parse(groups[2].Value),
+                int.Parse(groups[3].Value),
+                int.Parse(groups[4].Value)
+            );
+        }
+
+        private static IEnumerable<(int x, int y)> GenerateCandidateVelocities((int minX, int maxX, int minY, int maxY) targetRange)
+        {
+            foreach (var x in Enumerable.Range(1, targetRange.maxX))
+            {
+                foreach (var y in Enumerable.Range(targetRange.minY, 1000)) //arbitrary bound
+                {
+                    yield return (x, y);
+                }
+            }
+        }
+
+        private static int TrackProbeMaxY((int x, int y) velocity, (int minX, int maxX, int minY, int maxY) targetRange)
         {
             var position = (x: 0, y: 0);
             var maxY = 0;
@@ -82,17 +94,16 @@ namespace AdventOfCode2021.Solvers
                 velocity = (velocity.x + dx, velocity.y - 1);
 
                 maxY = Math.Max(maxY, position.y);
-                if (InRange(position.x, xRange) && InRange(position.y, yRange))
+                if (InRange(position.x, (targetRange.minX, targetRange.maxX)) && InRange(position.y, (targetRange.minY, targetRange.maxY)))
                 {
                     return maxY; // assuming we don't reach the highest point after the target.
                 }
 
-                if (velocity.x == 0 && !InRange(position.x, xRange)
-                    || velocity.x < 0 && position.x < xRange.Item1
-                    || velocity.x > 0 && position.x > xRange.Item2
-                    || velocity.y < 0 && position.y < yRange.Item1)
+                if (velocity.x <= 0 && position.x < targetRange.minX
+                    || velocity.x >= 0 && position.x > targetRange.maxX
+                    || velocity.y < 0 && position.y < targetRange.minY)
                 {
-                    return -1;
+                    break;
                 }
             }
 
