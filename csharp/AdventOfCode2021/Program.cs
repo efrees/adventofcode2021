@@ -10,24 +10,26 @@ namespace AdventOfCode2021
     {
         private static readonly IReadOnlyList<ISolver> Solvers = new ISolver[]
         {
-            //new Day01Solver(),
-            //new Day02Solver(),
-            //new Day03Solver(),
-            //new Day04Solver(),
-            //new Day05Solver(),
-            //new Day06Solver(),
-            //new Day07Solver(),
-            //new Day08Solver(),
-            //new Day09Solver(),
-            //new Day10Solver(),
-            //new Day11Solver(),
-            //new Day12Solver(),
-            //new Day13Solver(),
-            //new Day14Solver(),
-            //new Day15Solver(),
-            //new Day16Solver(),
-            //new Day17Solver(),
+            new Day01Solver(),
+            new Day02Solver(),
+            new Day03Solver(),
+            new Day04Solver(),
+            new Day05Solver(),
+            new Day06Solver(),
+            new Day07Solver(),
+            new Day08Solver(),
+            new Day09Solver(),
+            new Day10Solver(),
+            new Day11Solver(),
+            new Day12Solver(),
+            new Day13Solver(),
+            new Day14Solver(),
+            new Day15Solver(),
+            new Day16Solver(),
+            new Day17Solver(),
             new Day18Solver(),
+            new NullSolver("Day 19"),
+            new Day20Solver()
         };
 
         public static void Main()
