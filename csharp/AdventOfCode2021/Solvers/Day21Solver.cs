@@ -18,7 +18,7 @@ namespace AdventOfCode2021.Solvers
                 .ToList();
 
             Console.WriteLine($"Output (part 1): {GetPart1Answer(lines)}");
-            //Console.WriteLine($"Output (part 2): {GetPart2Answer(lines)}");
+            Console.WriteLine($"Output (part 2): {GetPart2Answer(lines)}");
         }
 
         private int ParseStartingPosition(string line)
@@ -41,7 +41,7 @@ namespace AdventOfCode2021.Solvers
                 var totalMove = RollDeterministically(ref nextRoll);
                 totalMove += RollDeterministically(ref nextRoll);
                 totalMove += RollDeterministically(ref nextRoll);
-                rollCount+=3;
+                rollCount += 3;
 
                 position1 = MovePlayer(position1, totalMove);
                 score1 += position1;
@@ -50,7 +50,6 @@ namespace AdventOfCode2021.Solvers
                 {
                     break;
                 }
-
 
                 totalMove = RollDeterministically(ref nextRoll);
                 totalMove += RollDeterministically(ref nextRoll);
@@ -62,6 +61,76 @@ namespace AdventOfCode2021.Solvers
             }
 
             return Math.Min(score1, score2) * rollCount;
+        }
+
+        private static long GetPart2Answer(List<int> input)
+        {
+            var position1 = input.First();
+            var position2 = input.Last();
+            var score1 = 0;
+            var score2 = 0;
+
+            var totalRollOccurrences = GetTotalRollDistribution();
+            return CountPlayerOneWins(position1, position2, score1, score2, totalRollOccurrences);
+        }
+
+        private static long CountPlayerOneWins(int position1,
+            int position2,
+            int score1,
+            int score2,
+            Dictionary<int, int> totalRollOccurrences)
+        {
+            if (score1 >= 21)
+            {
+                return 1;
+            }
+
+            if (score2 >= 21)
+            {
+                return 0;
+            }
+
+            var allWins = 0L;
+            foreach (var (totalRoll1, weight1) in totalRollOccurrences)
+            {
+                var nextPosition1 = MovePlayer(position1, totalRoll1);
+                var nextScore1 = score1 + nextPosition1;
+
+                if (nextScore1 >= 21)
+                {
+                    allWins += weight1;
+                    continue;
+                }
+
+                foreach (var (totalRoll2, weight2) in totalRollOccurrences)
+                {
+                    var nextPosition2 = MovePlayer(position2, totalRoll2);
+
+                    var nestedWins = CountPlayerOneWins(nextPosition1, nextPosition2, nextScore1, score2 + nextPosition2, totalRollOccurrences);
+
+                    allWins += nestedWins * weight2 * weight1;
+                }
+            }
+
+            return allWins;
+        }
+
+        private static Dictionary<int, int> GetTotalRollDistribution()
+        {
+            var totalRollOccurrences = new Dictionary<int, int>();
+            var possibleRolls = new[] { 1, 2, 3 };
+            var allRollCombinations =
+                from x in possibleRolls
+                from y in possibleRolls
+                from z in possibleRolls
+                select x + y + z;
+
+            foreach (var totalRoll in allRollCombinations)
+            {
+                totalRollOccurrences[totalRoll] = totalRollOccurrences.GetValueOrDefault(totalRoll, 0) + 1;
+            }
+
+            return totalRollOccurrences;
         }
 
         private static int RollDeterministically(ref int nextRoll)

@@ -18,7 +18,7 @@ namespace AdventOfCode2021.Solvers
                 .ToList();
 
             Console.WriteLine($"Output (part 1): {GetPart1Answer(lines)}");
-            Console.WriteLine($"Output (part 2): {GetPart2Answer(lines)}"); // < 72432
+            Console.WriteLine($"Output (part 2): {GetPart2Answer(lines)}");
         }
 
         private static int GetPart1Answer(List<string> input)
