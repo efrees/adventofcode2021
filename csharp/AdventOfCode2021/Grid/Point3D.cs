@@ -1,4 +1,6 @@
-﻿namespace AdventOfCode2021.Grid
+﻿using System;
+
+namespace AdventOfCode2021.Grid
 {
     public record Point3D(long X, long Y, long Z)
     {
@@ -16,6 +18,13 @@
         public Point3D Subtract(Point3D other)
         {
             return new(X - other.X, Y - other.Y, Z - other.Z);
+        }
+
+        public long ManhattanDistance(Point3D other)
+        {
+            return Math.Abs(X - other.X)
+                   + Math.Abs(Y - other.Y)
+                   + Math.Abs(Z - other.Z);
         }
 
         public Point3D Rotate90AroundX()
