@@ -32,9 +32,9 @@ namespace AdventOfCode2021.Solvers
         private static long GetPart2Answer(List<string> input)
         {
             var maxSum = 0L;
-            for (int i = 0; i < input.Count; i++)
+            for (var i = 0; i < input.Count; i++)
             {
-                for (int j = 0; j < input.Count; j++)
+                for (var j = 0; j < input.Count; j++)
                 {
                     if (i == j) continue;
 
@@ -62,7 +62,7 @@ namespace AdventOfCode2021.Solvers
 
         private class SmallfishNumber
         {
-            public int? Literal { get; set; }
+            private int? Literal { get; set; }
             public SmallfishNumber Left { get; set; }
             public SmallfishNumber Right { get; set; }
 
@@ -74,7 +74,7 @@ namespace AdventOfCode2021.Solvers
 
             public void Reduce()
             {
-                var hasChanged = false;
+                bool hasChanged;
                 do
                 {
                     hasChanged = ExplodeFirst(this, 0) is not null
@@ -95,7 +95,7 @@ namespace AdventOfCode2021.Solvers
                     return number;
                 }
 
-                if (ExplodeFirst(number.Left, depth + 1) is SmallfishNumber pairFromLeft)
+                if (ExplodeFirst(number.Left, depth + 1) is { } pairFromLeft)
                 {
                     if (depth == 3)
                     {

@@ -32,7 +32,6 @@ namespace AdventOfCode2021.Solvers
         {
             var cursor = 0;
 
-            //71649268678 too low
             return ParsePacketAndComputeValue(input, ref cursor);
         }
 
@@ -58,7 +57,8 @@ namespace AdventOfCode2021.Solvers
                     'C' => "1100",
                     'D' => "1101",
                     'E' => "1110",
-                    'F' => "1111"
+                    'F' => "1111",
+                    _ => throw new ArgumentOutOfRangeException(nameof(hexInput), "Invalid hex input")
                 });
             }
 
@@ -101,7 +101,7 @@ namespace AdventOfCode2021.Solvers
 
         private static long ParsePacketAndComputeValue(string binary, ref int cursor)
         {
-            var version = GetInt(binary, cursor, 3);
+            GetInt(binary, cursor, 3);
             var typeId = GetInt(binary, cursor + 3, 3);
             cursor += 6;
 
@@ -148,7 +148,7 @@ namespace AdventOfCode2021.Solvers
                 7 => nestedValues.First() == nestedValues.Last()
                     ? 1
                     : 0,
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new ArgumentOutOfRangeException(nameof(binary), "Invalid operation type")
             };
         }
 

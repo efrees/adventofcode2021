@@ -7,13 +7,13 @@ namespace AdventOfCode2021.Grid
 {
     public class SparseGrid<TCell>
     {
-        private readonly Dictionary<(long x, long y), TCell> _data = new Dictionary<(long x, long y), TCell>();
+        private readonly Dictionary<(long x, long y), TCell> _data = new();
         public long xMin {get; private set;} = long.MaxValue;
         public long xMax {get; private set;} = long.MinValue;
         public long yMin {get; private set;} = long.MaxValue;
         public long yMax {get; private set; } = long.MinValue;
 
-        public static SparseGrid<TCell> Parse<TCell>(IEnumerable<string> input, Func<char, TCell> valueSelector)
+        public static SparseGrid<TCell> Parse(IEnumerable<string> input, Func<char, TCell> valueSelector)
         {
             var grid = new SparseGrid<TCell>();
             var allPairs = input

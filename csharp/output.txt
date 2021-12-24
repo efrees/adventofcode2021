@@ -1,65 +1,62 @@
-C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\Grid\SparseGrid.cs(16,47): warning CS0693: Type parameter 'TCell' has the same name as the type parameter from outer type 'SparseGrid<TCell>' [C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\AdventOfCode2021.csproj]
-C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\Solvers\Day16Solver.cs(44,31): warning CS8509: The switch expression does not handle all possible values of its input type (it is not exhaustive). For example, the pattern ''\0'' is not covered. [C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\AdventOfCode2021.csproj]
-C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\Solvers\Day10Solver.cs(95,22): warning CS8509: The switch expression does not handle all possible values of its input type (it is not exhaustive). For example, the pattern ''\0'' is not covered. [C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\AdventOfCode2021.csproj]
 Day 1
 Output (part 1): 1316
 Output (part 2): 1344
-Solved in 0.028687300s
+Solved in 0.026331500s
 
 Day 2
 Output (part 1): 1762050
 Output (part 2): 1855892637
-Solved in 0.002316600s
+Solved in 0.002132000s
 
 Day 3
 Output (part 1): 852500
 Output (part 2): 1007985
-Solved in 0.012443200s
+Solved in 0.008721900s
 
 Day 4
 Output (part 1): 31424
 Output (part 2): 23042
-Solved in 0.009275800s
+Solved in 0.009534300s
 
 Day 5
 Output (part 1): 5260
 Output (part 2): 21613
-Solved in 0.126414300s
+Solved in 0.105464300s
 
 Day 6
 Output (part 1): 379114
 Output (part 2): 1702631502303
-Solved in 0.004616100s
+Solved in 0.005411900s
 
 Day 7
 Output (part 1): 344735
 Output (part 2): 96798233
-Solved in 0.012651200s
+Solved in 0.017731800s
 
 Day 8
 Output (part 1): 452
 Output (part 2): 1096964
-Solved in 0.010961300s
+Solved in 0.009879700s
 
 Day 9
 Output (part 1): 580
 Output (part 2): 856716
-Solved in 0.016491700s
+Solved in 0.016929300s
 
 Day 10
 Output (part 1): 392367
 Output (part 2): 2192104158
-Solved in 0.005963200s
+Solved in 0.006483900s
 
 Day 11
 Output (part 1): 1743
 Output (part 2): 364
-Solved in 0.026638200s
+Solved in 0.024361500s
 
 Day 12
 Output (part 1): 3708
 Output (part 2): 93858
-Solved in 0.178705300s
+Solved in 0.156628800s
 
 Day 13
 Output (part 1): 743
@@ -70,47 +67,47 @@ Output (part 2):
 ###..#....###..#....####.#.#..#..#.#...
 #.#..#..#.#....#....#..#.#.#..#..#.#...
 #..#..##..#....####.#..#.#..#.#..#.####
-Solved in 0.009358200s
+Solved in 0.009058200s
 
 Day 14
 Output (part 1): 2915
 Output (part 2): 3353146900153
-Solved in 0.030165400s
+Solved in 0.030361200s
 
 Day 15
 Output (part 1): 472
 Output (part 2): 2851
-Solved in 0.452809400s
+Solved in 0.438724700s
 
 Day 16
 Output (part 1): 895
 Output (part 2): 1148595959144
-Solved in 0.003482900s
+Solved in 0.003674600s
 
 Day 17
 Output (part 1): 13203
 Output (part 2): 5644
-Solved in 0.032241100s
+Solved in 0.032794200s
 
 Day 18
 Output (part 1): 4202
 Output (part 2): 4779
-Solved in 0.133999400s
+Solved in 0.127926700s
 
 Day 19
 Output (part 1): 355
 Output (part 2): 10842
-Solved in 2.617566600s
+Solved in 2.507502800s
 
 Day 20
 Output (part 1): 5218
 Output (part 2): 15527
-Solved in 1.823515800s
+Solved in 1.829700800s
 
 Day 21
 Output (part 1): 802452
 Output (part 2): 270005289024391
-Solved in 0.834305400s
+Solved in 0.839902600s
 
-Total time: 6.374439100s
+Total time: 6.210950200s
 

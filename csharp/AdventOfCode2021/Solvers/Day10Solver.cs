@@ -101,7 +101,8 @@ namespace AdventOfCode2021.Solvers
                 '>' => '<',
                 '}' => '{',
                 ']' => '[',
-                ')' => '('
+                ')' => '(',
+                _ => throw new ArgumentOutOfRangeException(nameof(c), c, null)
             };
         }
 
