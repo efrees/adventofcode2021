@@ -19,7 +19,7 @@ namespace AdventOfCode2021.Solvers
                 .ToList();
 
             Console.WriteLine($"Output (part 1): {GetPart1Answer(lines)}");
-            //Console.WriteLine($"Output (part 2): {GetPart2Answer(lines)}");
+            Console.WriteLine($"Output (part 2): {GetPart2Answer(lines)}");
         }
 
         private static int GetPart1Answer(List<string> input)
@@ -72,96 +72,49 @@ namespace AdventOfCode2021.Solvers
 
                     if (hallLocations.Contains(amphipod.Position))
                     {
-                        var targetRoomLocation = new Point2D(GoalXPosition(amphipod.Type), 3);
+                        var goalXPosition = GoalXPosition(amphipod.Type);
+                        var goalYPosition = new[] { 3, 2 }.FirstOrDefault(y =>
+                            !indexedPositions.TryGetValue((goalXPosition, y), out var other) || other.Type != amphipod.Type);
 
-                        if (indexedPositions.TryGetValue(targetRoomLocation, out var other) && other.Type == amphipod.Type)
+                        if (goalYPosition == 0)
                         {
-                            targetRoomLocation = (GoalXPosition(amphipod.Type), 2);
+                            continue;
                         }
+                        var targetLocation = new Point2D(goalXPosition, goalYPosition);
 
-                        var canReachTarget = true;
-                        var horizontalMove = GetHorizontalMoveRange(amphipod, targetRoomLocation);
-                        for (var i = horizontalMove.min; i <= horizontalMove.max; i++)
-                        {
-                            if (i != amphipod.Position.X && indexedPositions.ContainsKey((i, amphipod.Position.Y)))
-                            {
-                                canReachTarget = false;
-                            }
-                        }
-
-                        for (var j = amphipod.Position.Y + 1; j <= targetRoomLocation.Y; j++)
-                        {
-                            if (indexedPositions.ContainsKey((targetRoomLocation.X, j)))
-                            {
-                                canReachTarget = false;
-                            }
-                        }
+                        var horizontalMove = GetHorizontalMoveRange(amphipod, targetLocation);
+                        var canReachTarget = IsHallwayClearBetween(horizontalMove, indexedPositions)
+                                             && CanReachHallwayFrom(targetLocation.Add((0, 1)), indexedPositions);
 
                         if (!canReachTarget)
                         {
                             continue;
                         }
 
-                        var moveDistance = (int)targetRoomLocation
-                            .Subtract(amphipod.Position)
-                            .ManhattanDistance(Point2D.Origin);
-                        var moveCost = moveDistance * MoveCost(amphipod.Type);
-                        var updatedAmphipods = searchState.Amphipods.Where(a => a != amphipod).ToList();
-                        updatedAmphipods.Add(new Amphipod
-                        {
-                            Position = targetRoomLocation,
-                            Type = amphipod.Type
-                        });
-
-                        var actualCost = searchState.Cost + moveCost;
-                        frontier.Enqueue(actualCost + HeuristicCostRemaining(updatedAmphipods), new SearchState
-                        {
-                            Amphipods = updatedAmphipods,
-                            Cost = actualCost
-                        });
+                        var nextSearchState = CreateStateAfterMove(searchState, amphipod, targetLocation);
+                        frontier.Enqueue(nextSearchState.Cost + HeuristicCostRemaining(nextSearchState.Amphipods), nextSearchState);
                     }
                     else
                     {
                         //currently in the wrong room or needs to move
+                        if (!CanReachHallwayFrom(amphipod.Position, indexedPositions))
+                        {
+                            continue;
+                        }
+
                         foreach (var targetLocation in hallLocations.Except(forbiddenStoppingPoints).Except(indexedPositions.Keys))
                         {
                             var canReachTarget = true;
                             var horizontalMove = GetHorizontalMoveRange(amphipod, targetLocation);
-                            for (var i = horizontalMove.min; i <= horizontalMove.max; i++)
-                            {
-                                if (i != amphipod.Position.X && indexedPositions.ContainsKey((i, amphipod.Position.Y)))
-                                {
-                                    canReachTarget = false;
-                                }
-                            }
-
-                            if (indexedPositions.ContainsKey((amphipod.Position.X, amphipod.Position.Y - 1)))
-                            {
-                                canReachTarget = false;
-                            }
-
+                            canReachTarget = IsHallwayClearBetween(horizontalMove, indexedPositions);
+                            
                             if (!canReachTarget)
                             {
                                 continue;
                             }
 
-                            var moveDistance = (int)targetLocation
-                                .Subtract(amphipod.Position)
-                                .ManhattanDistance(Point2D.Origin);
-                            var moveCost = moveDistance * MoveCost(amphipod.Type);
-                            var updatedAmphipods = searchState.Amphipods.Where(a => a != amphipod).ToList();
-                            updatedAmphipods.Add(new Amphipod
-                            {
-                                Position = targetLocation,
-                                Type = amphipod.Type
-                            });
-
-                            var actualCost = searchState.Cost + moveCost;
-                            frontier.Enqueue(actualCost + HeuristicCostRemaining(updatedAmphipods), new SearchState
-                            {
-                                Amphipods = updatedAmphipods,
-                                Cost = actualCost
-                            });
+                            var nextSearchState = CreateStateAfterMove(searchState, amphipod, targetLocation);
+                            frontier.Enqueue(nextSearchState.Cost + HeuristicCostRemaining(nextSearchState.Amphipods), nextSearchState);
                         }
                     }
                 }
@@ -170,7 +123,151 @@ namespace AdventOfCode2021.Solvers
             return -1;
         }
 
-        private static int HeuristicCostRemaining(List<Amphipod> amphipods)
+        private static int GetPart2Answer(List<string> input)
+        {
+            input.Insert(3, "  #D#C#B#A#");
+            input.Insert(4, "  #D#B#A#C#");
+
+            var initialGrid = SparseGrid<char>.Parse(input, ch => ch);
+            var initialAmphipods = initialGrid.GetAllCoordinates()
+                .Where(coords => char.IsLetter(initialGrid.GetCell(coords)))
+                .Select(coords => new Amphipod
+                {
+                    Type = initialGrid.GetCell(coords),
+                    Position = coords
+                })
+                .ToList();
+
+            var forbiddenStoppingPoints = new HashSet<Point2D> { (3, 1), (5, 1), (7, 1), (9, 1) };
+
+            var hallLocations = initialGrid.GetAllCoordinates()
+                .Where(coords => initialGrid.GetCell(coords) == '.')
+                .ToHashSet();
+            var roomLocations = initialAmphipods.Select(a => a.Position).ToHashSet();
+
+            var frontier = new BinaryHeap<int, SearchState>();
+            frontier.Add(0, new SearchState
+            {
+                Amphipods = initialAmphipods
+            });
+            while (frontier.Count > 0)
+            {
+                var searchState = frontier.Dequeue().Value;
+
+                if (IsFinalState(searchState.Amphipods))
+                {
+                    return searchState.Cost;
+                }
+
+                var indexedPositions = searchState.Amphipods
+                    .ToDictionary(a => a.Position);
+
+                foreach (var amphipod in searchState.Amphipods)
+                {
+                    if (IsInFinalPosition(amphipod) && !IsAboveDifferentType(indexedPositions, amphipod))
+                    {
+                        continue;
+                    }
+
+                    if (hallLocations.Contains(amphipod.Position))
+                    {
+                        var goalXPosition = GoalXPosition(amphipod.Type);
+                        var goalYPosition = new[] { 5, 4, 3, 2 }.FirstOrDefault(y =>
+                            !indexedPositions.TryGetValue((goalXPosition, y), out var other) || other.Type != amphipod.Type);
+                        if (goalYPosition == 0)
+                        {
+                            continue;
+                        }
+                        var targetLocation = new Point2D(goalXPosition, goalYPosition);
+
+                        var horizontalMove = GetHorizontalMoveRange(amphipod, targetLocation);
+                        var canReachTarget = IsHallwayClearBetween(horizontalMove, indexedPositions)
+                            && CanReachHallwayFrom(targetLocation.Add((0, 1)), indexedPositions);
+
+                        if (!canReachTarget)
+                        {
+                            continue;
+                        }
+
+                        var nextSearchState = CreateStateAfterMove(searchState, amphipod, targetLocation);
+                        frontier.Enqueue(nextSearchState.Cost + HeuristicCostRemaining(nextSearchState.Amphipods), nextSearchState);
+                    }
+                    else
+                    {
+                        //currently in the wrong room or needs to move
+                        if (!CanReachHallwayFrom(amphipod.Position, indexedPositions))
+                        {
+                            continue;
+                        }
+
+                        foreach (var targetLocation in hallLocations.Except(forbiddenStoppingPoints).Except(indexedPositions.Keys))
+                        {
+                            var horizontalMove = GetHorizontalMoveRange(amphipod, targetLocation);
+
+                            if (!IsHallwayClearBetween(horizontalMove, indexedPositions))
+                            {
+                                continue;
+                            }
+
+                            var nextSearchState = CreateStateAfterMove(searchState, amphipod, targetLocation);
+                            frontier.Enqueue(nextSearchState.Cost + HeuristicCostRemaining(nextSearchState.Amphipods), nextSearchState);
+                        }
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        private static SearchState CreateStateAfterMove(SearchState searchState, Amphipod amphipod, Point2D targetLocation)
+        {
+            var moveDistance = (int)targetLocation
+                .Subtract(amphipod.Position)
+                .ManhattanDistance(Point2D.Origin);
+            var moveCost = moveDistance * MoveCost(amphipod.Type);
+            var updatedAmphipods = searchState.Amphipods.Where(a => a != amphipod).ToList();
+            updatedAmphipods.Add(new Amphipod
+            {
+                Position = targetLocation,
+                Type = amphipod.Type
+            });
+
+            var actualCost = searchState.Cost + moveCost;
+            var nextSearchState = new SearchState
+            {
+                Amphipods = updatedAmphipods,
+                Cost = actualCost
+            };
+            return nextSearchState;
+        }
+
+        private static bool IsHallwayClearBetween((long min, long max) horizontalMove, Dictionary<Point2D, Amphipod> indexedPositions)
+        {
+            for (var i = horizontalMove.min; i <= horizontalMove.max; i++)
+            {
+                if (indexedPositions.ContainsKey((i, 1)))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool CanReachHallwayFrom(Point2D startingPosition, Dictionary<Point2D, Amphipod> indexedPositions)
+        {
+            for (var j = startingPosition.Y - 1; j >= 1; j--)
+            {
+                if (indexedPositions.ContainsKey((startingPosition.X, j)))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static int HeuristicCostRemaining(IList<Amphipod> amphipods)
         {
             return amphipods
                 .Select(a => MoveCost(a.Type) * (int)Math.Abs(a.Position.X - GoalXPosition(a.Type)))
@@ -179,19 +276,16 @@ namespace AdventOfCode2021.Solvers
 
         private static (long min, long max) GetHorizontalMoveRange(Amphipod amphipod, (long X, long Y) targetRoomLocation)
         {
-            var horizontalMove = (min: amphipod.Position.X, max: targetRoomLocation.X);
-            if (horizontalMove.min > horizontalMove.max)
-            {
-                horizontalMove = (horizontalMove.max, horizontalMove.min);
-            }
-
-            return horizontalMove;
+            return amphipod.Position.X < targetRoomLocation.X
+                ? (amphipod.Position.X + 1, targetRoomLocation.X)
+                : (targetRoomLocation.X, amphipod.Position.X - 1);
         }
 
         private static bool IsAboveDifferentType(Dictionary<Point2D, Amphipod> indexedPositions, Amphipod amphipod)
         {
-            return indexedPositions.TryGetValue((amphipod.Position.X, amphipod.Position.Y + 1), out var other)
-                   && other.Type != amphipod.Type;
+            return Enumerable.Range(1, 3)
+                .Any(offset => indexedPositions.TryGetValue((amphipod.Position.X, amphipod.Position.Y + offset), out var other)
+                   && other.Type != amphipod.Type);
         }
 
         private static bool IsFinalState(IList<Amphipod> amphipods)
@@ -201,7 +295,7 @@ namespace AdventOfCode2021.Solvers
 
         private static bool IsInFinalPosition(Amphipod amphipod)
         {
-            return amphipod.Position.Y is 2 or 3
+            return amphipod.Position.Y is 2 or 3 or 4 or 5
                    && amphipod.Position.X == GoalXPosition(amphipod.Type);
         }
 
