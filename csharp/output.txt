@@ -1,64 +1,64 @@
-C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\Solvers\Day23Solver.cs(368,25): warning CS8509: The switch expression does not handle all possible values of its input type (it is not exhaustive). For example, the pattern ''\0'' is not covered. [C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\AdventOfCode2021.csproj]
-C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\Solvers\Day23Solver.cs(379,25): warning CS8509: The switch expression does not handle all possible values of its input type (it is not exhaustive). For example, the pattern ''\0'' is not covered. [C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\AdventOfCode2021.csproj]
+C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\Solvers\Day23Solver.cs(304,25): warning CS8509: The switch expression does not handle all possible values of its input type (it is not exhaustive). For example, the pattern ''\0'' is not covered. [C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\AdventOfCode2021.csproj]
+C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\Solvers\Day23Solver.cs(315,25): warning CS8509: The switch expression does not handle all possible values of its input type (it is not exhaustive). For example, the pattern ''\0'' is not covered. [C:\Development\exercises\adventofcode2021\csharp\AdventOfCode2021\AdventOfCode2021.csproj]
 Day 1
 Output (part 1): 1316
 Output (part 2): 1344
-Solved in 0.027988600s
+Solved in 0.033119600s
 
 Day 2
 Output (part 1): 1762050
 Output (part 2): 1855892637
-Solved in 0.001687500s
+Solved in 0.002927700s
 
 Day 3
 Output (part 1): 852500
 Output (part 2): 1007985
-Solved in 0.009294400s
+Solved in 0.011732200s
 
 Day 4
 Output (part 1): 31424
 Output (part 2): 23042
-Solved in 0.009385800s
+Solved in 0.010167800s
 
 Day 5
 Output (part 1): 5260
 Output (part 2): 21613
-Solved in 0.111230700s
+Solved in 0.121054800s
 
 Day 6
 Output (part 1): 379114
 Output (part 2): 1702631502303
-Solved in 0.005094800s
+Solved in 0.004037600s
 
 Day 7
 Output (part 1): 344735
 Output (part 2): 96798233
-Solved in 0.012813500s
+Solved in 0.012926700s
 
 Day 8
 Output (part 1): 452
 Output (part 2): 1096964
-Solved in 0.010075500s
+Solved in 0.010480900s
 
 Day 9
 Output (part 1): 580
 Output (part 2): 856716
-Solved in 0.016763000s
+Solved in 0.018671300s
 
 Day 10
 Output (part 1): 392367
 Output (part 2): 2192104158
-Solved in 0.006692400s
+Solved in 0.006208100s
 
 Day 11
 Output (part 1): 1743
 Output (part 2): 364
-Solved in 0.023590100s
+Solved in 0.024391400s
 
 Day 12
 Output (part 1): 3708
 Output (part 2): 93858
-Solved in 0.181833200s
+Solved in 0.184175000s
 
 Day 13
 Output (part 1): 743
@@ -69,57 +69,66 @@ Output (part 2):
 ###..#....###..#....####.#.#..#..#.#...
 #.#..#..#.#....#....#..#.#.#..#..#.#...
 #..#..##..#....####.#..#.#..#.#..#.####
-Solved in 0.010051500s
+Solved in 0.009862000s
 
 Day 14
 Output (part 1): 2915
 Output (part 2): 3353146900153
-Solved in 0.031229700s
+Solved in 0.031619300s
 
 Day 15
 Output (part 1): 472
 Output (part 2): 2851
-Solved in 0.449314900s
+Solved in 0.483133200s
 
 Day 16
 Output (part 1): 895
 Output (part 2): 1148595959144
-Solved in 0.003417700s
+Solved in 0.003146300s
 
 Day 17
 Output (part 1): 13203
 Output (part 2): 5644
-Solved in 0.032841600s
+Solved in 0.033189700s
 
 Day 18
 Output (part 1): 4202
 Output (part 2): 4779
-Solved in 0.129566900s
+Solved in 0.134805600s
 
 Day 19
 Output (part 1): 355
 Output (part 2): 10842
-Solved in 2.595169000s
+Solved in 2.601279000s
 
 Day 20
 Output (part 1): 5218
 Output (part 2): 15527
-Solved in 1.823863200s
+Solved in 1.976161500s
 
 Day 21
 Output (part 1): 802452
 Output (part 2): 270005289024391
-Solved in 1.373833600s
+Solved in 0.847936200s
 
 Day 22
 Output (part 1): 647062
 Output (part 2): 1319618626668022
-Solved in 0.842234400s
+Solved in 0.812124800s
 
 Day 23
 Output (part 1): 14350
 Output (part 2): 49742
-Solved in 2204.787352600s
+Solved in 2513.986919400s
 
-Total time: 2253.497309500s
+Day 24
+Output (part 1): 96979989692495
+Output (part 2): 51316214181141
+Solved in 0.000816800s
+
+Day 25
+Output (part 1): 389
+Solved in 1.122072800s
+
+Total time: 2522.484933900s
 

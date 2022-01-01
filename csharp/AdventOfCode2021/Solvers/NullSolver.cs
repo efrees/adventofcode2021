@@ -1,7 +1,4 @@
-﻿using Collections.Generic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 namespace AdventOfCode2021.Solvers
 {
