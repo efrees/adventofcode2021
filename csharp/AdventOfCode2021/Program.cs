@@ -24,15 +24,16 @@ namespace AdventOfCode2021
             new Day12Solver(),
             new Day13Solver(),
             new Day14Solver(),
-            new Day15Solver(),
-            new Day16Solver(),
-            new Day17Solver(),
-            new Day18Solver(),
-            new Day19Solver(),
-            new Day20Solver(),
-            new Day21Solver(),
-            new Day22Solver(),
-            new Day23Solver(),
+            //new Day15Solver(),
+            //new Day16Solver(),
+            //new Day17Solver(),
+            //new Day18Solver(),
+            //new Day19Solver(),
+            //new Day20Solver(),
+            //new Day21Solver(),
+            //new Day22Solver(),
+            //new Day23Solver(),
+            new Day24Solver()
         };
 
         public static void Main()

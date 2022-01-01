@@ -1,0 +1,214 @@
+input digit to w
+x = z % 26           // (z = 0; x = 0)
+z /= 1
+x += 12
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0   // (x = 1)
+y = 25*x + 1
+z *= y               // (z = 0)
+y = (w + 1) * x
+z += y               // push input digit + 1 onto z
+input digit to w
+x = z % 26
+z /= 1
+x += 13
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0   //if input digit is not previous digit + 13 (impossible)
+y = 25*x + 1         // (y = 26)
+z *= y
+y = (w + 9) * x
+z += y               // push input digit + 9 onto z
+input digit to w
+x = z % 26
+z /= 1               // don't pop
+x += 12
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not previous digit + 12 (impossible)
+y = 25*x + 1
+z *= y
+y = (w + 11) * x
+z += y              // then push input digit + 11 onto z
+input digit to w
+x = z % 26
+z /= 26             // pop last "digit" off of z
+x += -13
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not previous digit - 13
+                    // then push (input + 6) onto z
+y = 25*x + 1
+z *= y
+y = (w + 6) * x
+z += y
+input digit to w
+x = z % 26
+z /= 1              // don't pop
+x += 11
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not previous digit + 11  (x = 1)
+                    // then push (input + 6) onto z
+y = 25*x + 1
+z *= y
+y = (w + 6) * x
+z += y
+input digit to w
+x = z % 26
+z /= 1              // don't pop
+x += 15
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not previous digit + 15  (x = 1)
+                    // then push (input + 13) onto z
+y = 25*x + 1
+z *= y
+y = (w + 13) * x
+z += y
+input digit to w
+x = z % 26
+z /= 26             // pop last digit off of z
+x += -14
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not previous digit - 14
+                    // then push (input + 13) onto z
+y = 25*x + 1
+z *= y
+y = (w + 13) * x
+z += y
+input digit to w
+x *= 0
+x += z
+x %= 26
+z /= 1              // don't pop
+x += 12
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not previous digit + 12 (x = 1)
+                    // then push (input + 5) onto z
+y = 25*x + 1
+z *= y
+y = (w + 5) * x
+z += y
+input digit to w
+x *= 0
+x += z
+x %= 26
+z /= 26             // pop last off of z
+x += -8
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not previous digit - 8
+                    // then push (input + 7) onto z
+y = 25*x + 1
+z *= y
+y = (w + 7) * x
+z += y
+input digit to w
+x *= 0
+x += z
+x %= 26
+z /= 1              // don't pop
+x += 14
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not previous digit + 14 (x = 1)
+                    // then push (input + 2) onto z
+y = 25*x + 1
+z *= y
+y = (w + 2) * x
+z += y
+input digit to w
+x *= 0
+x += z
+x %= 26
+z /= 26             // pop last digit
+x += -9
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not previous digit - 9
+                    // then push (input + 10) onto z
+y = 25*x + 1
+z *= y
+y = (w + 10) * x
+z += y
+input digit to w
+x *= 0
+x += z
+x %= 26
+z /= 26             // pop last digit
+x += -11
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not previous digit - 11
+                    // then push (input + 14) onto z
+y = 25*x + 1
+z *= y
+y = (w + 14) * x
+z += y
+input digit to w
+x = z % 26
+z /= 26             // pop last digit off of z
+x += -6
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not 6 less than last digit of z
+y = 25 * x + 1
+z *= y
+y = (w + 7) * x
+z += y              // then push input digit + 7 onto z
+input digit to w
+x = z % 26
+z /= 26             // pop last digit off of z
+x += -5
+x = x == w ? 1 : 0
+x = x == 0 ? 1 : 0  // if input digit is not 5 less than last "digit" of z
+y = 25*x + 1
+z *= y
+y = (w + 1) * x
+z += y              // then push input digit + 1 onto z
+
+
+
+
+
+  push input digit + 1 onto z
+  push input digit + 9 onto z
+  push input digit + 11 onto z
+  pop last "digit" off of z
+  if input digit is not previous digit - 13
+    then push (input + 6) onto z
+  push (input + 6) onto z
+  push (input + 13) onto z
+  pop last digit off of z
+  if input digit is not previous digit - 14
+    then push (input + 13) onto z
+  push (input + 5) onto z
+  pop last off of z
+  if input digit is not previous digit - 8
+    then push (input + 7) onto z
+  push (input + 2) onto z
+  pop last digit
+  if input digit is not previous digit - 9
+    then push (input + 10) onto z
+  pop last digit
+  if input digit is not previous digit - 11
+    then push (input + 14) onto z
+  pop last digit off of z
+  if input digit is not 6 less than last digit of z
+    then push input digit + 7 onto z
+  pop last digit off of z
+  if input digit is not 5 less than last "digit" of z
+    then push input digit + 1 onto z
+Need z == 0
+
+7 unavoidable pushes; 7 pops => need all the if's to be false
+
+x1 + 1 - 5 = x14
+x2 + 9 - 6 = x13
+x3 + 11 - 13 = x4
+x5 + 6 - 11 = x12
+x6 + 13 - 14 = x7
+x8 + 5 - 8 = x9
+x10 + 2 - 9 = x11
+
+x1 - 4 = x14
+x2 + 3 = x13
+x3 - 2 = x4
+x5 - 5 = x12
+x6 - 1 = x7
+x8 - 3 = x9
+x10 - 7 = x11
+
+96979989692495
+51316214181141
